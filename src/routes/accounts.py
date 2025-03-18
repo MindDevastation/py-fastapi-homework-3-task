@@ -152,7 +152,7 @@ jwt_manager = JWTAuthManager(secret_key_access="secret_key", secret_key_refresh=
 async def register(user: UserRegisterRequest, db: Session = Depends(get_db)) -> dict[str, str]:
     existing_user = db.query(UserModel).filter(UserModel.email == user.email).first()
     if existing_user:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email уже используется")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email is already in use")
 
     hashed_password = hash_password(user.password)
 
@@ -162,7 +162,7 @@ async def register(user: UserRegisterRequest, db: Session = Depends(get_db)) -> 
 
     activation_token = jwt_manager.create_access_token(data={"email": user.email}, expires_delta=timedelta(hours=1))
 
-    activation_link = f"http: //example.com/activate/{activation_token}"
+    activation_link = f"https: //example.com/activate/{activation_token}"
 
     send_email(
         subject="Activate your account",
